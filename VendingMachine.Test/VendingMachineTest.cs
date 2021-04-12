@@ -187,7 +187,7 @@ namespace VendingMachineTest
             string msg = string.Empty;
             var purchaseSuceeded = machine.TryCreateNewOrder(recipe.RecipeId, 1, ref msg);
 
-            Assert.True(purchaseSuceeded);
+            Assert.False(purchaseSuceeded);
 
         }
 
