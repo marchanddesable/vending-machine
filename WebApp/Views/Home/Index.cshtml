@@ -1,0 +1,122 @@
+﻿@model List<RecipeViewModel>
+
+@{
+    var products = (List<ProductViewModel>)ViewBag.Products;
+
+}
+
+<div class="text-center">
+    <h4 class="display-4 mb-5">Distributeur de boissons chaudes</h4>
+    <div class="col-md-12">
+        <div class="col-md-8 float-left">
+            <div class="scrn">Selectionnez une boisson</div>
+            <div class="vmachinectnt">
+                @if (Model != null && Model.Any())
+                {
+
+                    @foreach (var item in Model)
+                    {
+                        <div class="machineBtn" data-rcpname="@item.RecipeName" data-rcpprice="@item.RecipeSalePrice">
+                            <ul>
+                                <li class="recipeName">@item.RecipeName</li>
+                                <li class="recipePrice">@item.RecipeSalePrice</li>
+                                <li class="buynow" data-recipeid="@item.RecipeId" data-recipename="@item.RecipeName">Acheter</li>
+                            </ul>
+                        </div>
+                    }
+                }
+            </div>
+            <a class="reinit" href="/reset">[ Reinitialiser la machine ]</a>
+            <ul class="expl">
+                <li>Cliquez sur un titre de boisson pour afficher le prix</li>
+                <li>Cliquez sur le bouton acheter, le stock sera mis à jour si l'achat est effectué</li>
+                <li>Le message "stock epuisé" signifie plus assez de produit pour la recette selectionnée</li>
+                <li>Cliquez sur le lien reinitialiser pour renouveler le stock</li>
+                <li>Le prix de vente est le total prix produit plus 30%</li>
+            </ul>
+        </div>
+        <div class="col-md-4 float-right">
+            <div class="prodLst">
+                @if (products != null && products.Any())
+                {
+                    <ul>
+                        <li class="stk">Etat du stock</li>
+                        @foreach (var item in products)
+                        {
+                            <li id="stock-@item.Id">@item.Name (@item.UnitsRemaining) - @item.Price</li>
+                        }
+                    </ul>
+                }
+            </div>
+            @if (Model != null && Model.Any())
+            {
+                <div class="rct">
+                    <ul>
+                        <li class="stk">Recettes</li>
+                        <li><i>Rappel: Prix de vente = +30%</i></li>
+                        @foreach (var item in Model)
+                        {
+                            @if (item.Ingredients != null)
+                            {
+                                <li>
+                                    <b>@item.RecipeName</b>
+                                    @foreach (var ing in item.Ingredients)
+                                    {
+                                        @Html.Raw($"{ing.Name}({ing.Quantity})&nbsp;");
+                                    }
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
+    </div>
+
+</div>
+
+<div id="buyModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Acheter une boisson</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="msgArea"></p>
+            </div>
+            <div class="modal-footer">
+                <button id="btnyes" type="button" class="btn btn-primary" data-dismiss="modal">Yes</button>
+                <button id="btnno" type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="infoModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Message</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="infoArea"></p>
+            </div>
+            <div class="modal-footer">
+                <button id="btnok" type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+
+}
+
